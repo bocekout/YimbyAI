@@ -1,16 +1,239 @@
+html,
 body {
-    font-family: sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 #map {
-    width: 90%;
-    max-width: 800px;
-    height: 400px;
-    margin-top: 20px;
-    border: 1px solid #ccc;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0.5;
+}
+
+#site-rect,
+#offset-rect {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 500;
+  display: none;
+}
+
+#site-rect {
+  width: 150px;
+  height: 400px;
+  border: 2px dashed #363636;
+}
+
+#offset-rect {
+  width: 100px;
+  height: 350px;
+  border: 2px dashed #757575;
+}
+
+.moved-rect {
+  left: calc(50% - 25vw) !important;
+}
+
+.modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content button {
+  margin-top: 10px;
+  padding: 10px 20px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.modal.corner {
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  transform: none !important;
+  width: 300px;
+  height: calc(100% - 100px);
+  overflow-y: auto;
+}
+
+.modal.wide {
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  transform: none !important;
+  width: calc(50% - 100px);
+  height: calc(100% - 100px);
+  overflow: hidden;
+}
+
+.modal.wide .modal-content {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 20px);
+}
+
+.modal.full-wide .modal-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 50px;
+}
+
+.option-container {
+  border: 1px solid #ccc;
+  padding: 50px;
+  box-sizing: border-box;
+}
+
+.option-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.option-container p {
+  margin-top: 10px;
+}
+
+.options-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-top: 15px;
+}
+
+.option-item img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 25px;
+}
+
+.option-item img:hover {
+  outline: 3px solid rgba(87, 87, 87, 0.2);
+  outline-offset: 0;
+}
+
+.option-item.active img {
+  outline: 4px solid #575757;
+  outline-offset: 2px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.buttons button {
+  flex: 1;
+  margin: 0 5px;
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.option-rect {
+  position: absolute;
+  pointer-events: none;
+  z-index: 500;
+  display: none;
+}
+
+#option1-rect {
+  top: calc(50% + 15px);
+  left: calc(50% - 25vw - 10px);
+  width: 50px;
+  height: 200px;
+  background-color: #363636;
+}
+
+#option2-rect {
+  top: calc(50% + 10px);
+  left: calc(50% - 25vw + 10px);
+  width: 20px;
+  height: 80px;
+  background-color: #363636;
+}
+
+#option3-rect {
+  top: calc(50% - 80px);
+  left: calc(50% - 25vw + 10px);
+  width: 50px;
+  height: 60px;
+  background-color: #363636;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.finance-box {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  flex: 1;
+}
+
+.finance-box h3 {
+  margin: 0 0 10px;
+  font-size: 1.2em;
+}
+
+.finance-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.data-boxes {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.data-box {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.data-box p:first-child {
+  margin: 0 0 8px;
+  font-weight: bold;
+}
+
+.data-box p:last-child {
+  margin: 0;
+  font-size: 1.1em;
 }
