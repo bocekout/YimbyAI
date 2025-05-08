@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Hackathon Map App</title>
@@ -7,10 +8,20 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <h1>Hackathon Map App</h1>
-    <div id="map" style="height: 400px;"></div>
+    <div id="map"></div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h2>Welcome to the App</h2>
+            <p>This is a hackathon prototype using a full-screen map.</p>
+            <button onclick="closeModal()">Start</button>
+        </div>
+    </div>
+
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
 </body>
+
 </html>
