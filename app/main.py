@@ -16,7 +16,7 @@ logger = logging.getLogger('RegridConnector')
 
 class RegridConnector:
     """
-    A connector class for fetching construction-relevant parcel data from Regrid's API.
+    A connector class for fetching relevant parcel data from Regrid's API.
     """
     
     # Updated base URLs to match Regrid API v2 endpoints
@@ -25,7 +25,7 @@ class RegridConnector:
     PARCEL_DETAILS_URL = f"{BASE_URL}/parcel"
     PARCEL_BOUNDARY_URL = f"{BASE_URL}/parcel_boundary"
     
-    # Updated construction-relevant fields to align with Regrid schema
+    # Fields relevant to construction cost calculations for urban infill construction
     CONSTRUCTION_FIELDS = [
         'll_uuid',
         'state_parcelnumb',
@@ -73,295 +73,63 @@ class RegridConnector:
         'median_household_income',
         'household_income_growth_next_5_years'
     ]
-    
-    def __init__(self, api_key: str):
+
+class RegridAPIConnector:
+    """
+    A connector class for interacting with Regrid's API to retrieve parcel data by address or point coordinates.
+    """
+
+    BASE_URL = "https://app.regrid.com/api/v2"
+
+    def __init__(self, api_token):
         """
-        Initialize the Regrid connector with your API key.
-        
-        Args:
-            api_key: Your Regrid API key
+        Initialize the connector with the API token.
+
+        :param api_token: Your Regrid API token.
         """
-        self.api_key = api_key
-        self.headers = {
-            "Authorization": f"Token {api_key}",
-            "Content-Type": "application/json"
+        self.api_token = api_token
+
+    def get_parcel_by_address(self, address, path=None, return_zoning=True):
+        """
+        Retrieve parcel data by address.
+
+        :param address: The address to query.
+        :param path: Optional path to narrow down the search (e.g., state, county, city).
+        :param return_zoning: Whether to include zoning data in the response.
+        :return: JSON response from the API.
+        """
+        endpoint = f"{self.BASE_URL}/parcels/address"
+        params = {
+            "query": address,
+            "path": path,
+            "return_zoning": str(return_zoning).lower(),
+            "token": self.api_token
         }
-    
-    def lookup_by_coordinates(self, lat: float, lon: float) -> Dict:
+        response = requests.get(endpoint, params=params)
+        response.raise_for_status()
+        return response.json()
+
+    def get_parcel_by_point(self, lat, lon, radius=None, return_zoning=True):
         """
-        Look up a parcel by coordinates using the Regrid API v2.
-        
-        Args:
-            lat: Latitude
-            lon: Longitude
-            
-        Returns:
-            Dictionary containing parcel information
+        Retrieve parcel data by latitude and longitude (point coordinates).
+
+        :param lat: Latitude of the point.
+        :param lon: Longitude of the point.
+        :param radius: Optional radius in meters to expand the search area.
+        :param return_zoning: Whether to include zoning data in the response.
+        :return: JSON response from the API.
         """
+        endpoint = f"{self.BASE_URL}/parcels/point"
         params = {
             "lat": lat,
-            "lon": lon
+            "lon": lon,
+            "radius": radius,
+            "return_zoning": str(return_zoning).lower(),
+            "token": self.api_token
         }
-        
-        logger.info(f"Looking up parcel at coordinates: ({lat}, {lon})")
-        response = requests.get(
-            f"{self.BASE_URL}/search/parcel/by_coordinates",  # Corrected endpoint
-            headers=self.headers, 
-            params=params
-        )
-        
-        if response.status_code != 200:
-            response.raise_for_status()
-            logger.error(f"Error in API call: {response.status_code} - {response.text}")
-        
-        data = response.json()
-        # Extract parcel_id for subsequent calls
-        if data and len(data) > 0:
-            logger.info(f"Found parcel with ID: {data[0].get('parcel_id')}")
-            return data[0]
-        else:
-            logger.warning("No parcel found at the specified coordinates")
-            return {}
-
-    def get_parcel_details(self, parcel_id: str) -> Dict:
-        """
-        Get detailed information about a parcel using the Regrid API v2.
-        
-        Args:
-            parcel_id: The unique parcel identifier
-            
-        Returns:
-            Dictionary containing detailed parcel information
-        """
-        url = f"{self.BASE_URL}/parcel/{parcel_id}"  # Corrected endpoint
-        
-        logger.info(f"Fetching details for parcel ID: {parcel_id}")
-        response = requests.get(url, headers=self.headers)
-        
-        if response.status_code == 200:
-            data = response.json()
-            logger.info("Successfully retrieved parcel details")
-            return data
-        else:
-            logger.error(f"Error in API call: {response.status_code} - {response.text}")
-            response.raise_for_status()
-
-    def get_parcel_boundary(self, parcel_id: str) -> Dict:
-        """
-        Get the boundary/polygon data for a parcel using the Regrid API v2.
-        
-        Args:
-            parcel_id: The unique parcel identifier
-            
-        Returns:
-            GeoJSON representation of the parcel boundary
-        """
-        url = f"{self.BASE_URL}/parcel/{parcel_id}/boundary"  # Corrected endpoint
-        
-        logger.info(f"Fetching boundary for parcel ID: {parcel_id}")
-        response = requests.get(url, headers=self.headers)
-        
-        if response.status_code == 200:
-            data = response.json()
-            logger.info("Successfully retrieved parcel boundary")
-            return data
-        else:
-            logger.error(f"Error in API call: {response.status_code} - {response.text}")
-            response.raise_for_status()
-    
-    def search_parcels_by_address(self, address: str, city: str = None, 
-                                  state: str = None, zip_code: str = None) -> List[Dict]:
-        """
-        Search for parcels by address components using the correct Regrid API v2 endpoint.
-        
-        Args:
-            address: Street address
-            city: City name (optional)
-            state: State code (optional)
-            zip_code: ZIP code (optional)
-            
-        Returns:
-            List of matching parcels
-        """
-        params = {"address": address}
-        
-        # Add optional parameters if provided
-        if city:
-            params["city"] = city
-        if state:
-            params["state"] = state
-        if zip_code:
-            params["zip"] = zip_code
-        
-        logger.info(f"Searching for parcels with address: {address}")
-        response = requests.get(
-            f"{self.BASE_URL}/search/parcel/by_address",  # Corrected endpoint
-            headers=self.headers, 
-            params=params
-        )
-        
-        if response.status_code == 200:
-            data = response.json()
-            logger.info(f"Found {len(data)} matching parcels")
-            return data
-        else:
-            logger.error(f"Error in API call: {response.status_code} - {response.text}")
-            response.raise_for_status()
-    
-    def get_construction_data_by_address(self, address: str, city: str = None,
-                                        state: str = None, zip_code: str = None) -> Dict:
-        """
-        Complete workflow to get construction-relevant data for an address.
-        
-        Args:
-            address: Street address
-            city: City name (optional)
-            state: State code (optional)
-            zip_code: ZIP code (optional)
-            
-        Returns:
-            Dictionary with construction-relevant parcel data
-        """
-        # First search for the parcel
-        search_results = self.search_parcels_by_address(address, city, state, zip_code)
-        
-        if not search_results or len(search_results) == 0:
-            logger.warning(f"No parcels found for address: {address}")
-            return {}
-        
-        # Get the first matching parcel
-        parcel_id = search_results[0].get('parcel_id')
-        
-        # Get details and boundary for the parcel
-        details = self.get_parcel_details(parcel_id)
-        boundary = self.get_parcel_boundary(parcel_id)
-        
-        # Combine the data
-        construction_data = {
-            "parcel_id": parcel_id,
-            "details": details,
-            "boundary": boundary
-        }
-        
-        return construction_data
-    
-    def get_construction_data_by_coordinates(self, lat: float, lon: float) -> Dict:
-        """
-        Complete workflow to get construction-relevant data for coordinates.
-        
-        Args:
-            lat: Latitude
-            lon: Longitude
-            
-        Returns:
-            Dictionary with construction-relevant parcel data
-        """
-        # First get the parcel at these coordinates
-        parcel = self.lookup_by_coordinates(lat, lon)
-        
-        if not parcel:
-            logger.warning(f"No parcel found at coordinates: ({lat}, {lon})")
-            return {}
-        
-        parcel_id = parcel.get('parcel_id')
-        
-        # Get details and boundary for the parcel
-        details = self.get_parcel_details(parcel_id)
-        boundary = self.get_parcel_boundary(parcel_id)
-        
-        # Combine the data
-        construction_data = {
-            "parcel_id": parcel_id,
-            "details": details,
-            "boundary": boundary
-        }
-        
-        return construction_data
-    
-    def _extract_construction_fields(self, data: Dict) -> Dict:
-        """
-        Extract only the construction-relevant fields from the API response.
-        
-        Args:
-            data: Complete parcel data dictionary
-            
-        Returns:
-            Dictionary with only construction-relevant fields
-        """
-        result = {}
-        
-        # Copy all construction-relevant fields that exist in the data
-        for field in self.CONSTRUCTION_FIELDS:
-            if field in data:
-                result[field] = data[field]
-        
-        # Add a few extra useful fields if they exist
-        extra_fields = ['owner_name', 'owner_address', 'tax_assessment', 'fips_code']
-        for field in extra_fields:
-            if field in data:
-                result[field] = data[field]
-                
-        return result
-    
-    def to_dataframe(self, parcels_data: List[Dict]) -> pd.DataFrame:
-        """
-        Convert a list of parcel data to a pandas DataFrame.
-        
-        Args:
-            parcels_data: List of parcel dictionaries
-            
-        Returns:
-            DataFrame with parcel data
-        """
-        # Flatten the nested structure for easier DataFrame creation
-        flattened_data = []
-        
-        for parcel in parcels_data:
-            flat_parcel = {"parcel_id": parcel.get("parcel_id")}
-            
-            # Add details fields
-            details = parcel.get("details", {})
-            for key, value in details.items():
-                flat_parcel[key] = value
-            
-            # Add basic boundary info (not the full geometry)
-            boundary = parcel.get("boundary", {})
-            if boundary and "properties" in boundary:
-                flat_parcel["has_boundary"] = True
-                flat_parcel["boundary_area"] = boundary.get("properties", {}).get("area")
-            else:
-                flat_parcel["has_boundary"] = False
-            
-            flattened_data.append(flat_parcel)
-        
-        return pd.DataFrame(flattened_data)
+        response = requests.get(endpoint, params=params)
+        response.raise_for_status()
+        return response.json()
 
 
-# Example usage:
-if __name__ == "__main__":
-    # Initialize with your API key from environment variable or a default
-    api_key = os.environ.get("REGRID_API_KEY", "your_regrid_api_key_here_as_default")
-    if api_key == "your_regrid_api_key_here_as_default":
-        logger.warning("Using default API key for example. Set REGRID_API_KEY environment variable.")
-    
-    regrid = RegridConnector(api_key)
-    
-    # Example 1: Get parcel data by address
-    construction_data = regrid.get_construction_data_by_address(
-        address="123 Main St",
-        city="Detroit",
-        state="MI"
-    )
-    
-    # Example 2: Get parcel data by coordinates
-    lat, lon = 42.331427, -83.045754  # Example coordinates in Detroit
-    construction_data = regrid.get_construction_data_by_coordinates(lat, lon)
-    
-    # Convert multiple parcels to DataFrame
-    parcels_list = [construction_data]
-    df = regrid.to_dataframe(parcels_list)
-    
-    # Save the data to CSV
-    df.to_csv("construction_parcels.csv", index=False)
-    
-    print(f"Processed {len(parcels_list)} parcels with construction data")
+
