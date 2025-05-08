@@ -14,16 +14,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger('RegridConnector')
 
-class RegridConnector:
-    """
-    A connector class for fetching relevant parcel data from Regrid's API.
-    """
-    
-    # Updated base URLs to match Regrid API v2 endpoints
-    BASE_URL = "https://app.regrid.com/api/v2/us"
-    PARCEL_POINT_URL = f"{BASE_URL}/parcel_points"
-    PARCEL_DETAILS_URL = f"{BASE_URL}/parcel"
-    PARCEL_BOUNDARY_URL = f"{BASE_URL}/parcel_boundary"
+class regrid_label_functions:
     
     # Fields relevant to construction cost calculations for urban infill construction
     CONSTRUCTION_FIELDS = [
