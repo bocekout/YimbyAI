@@ -19,39 +19,59 @@ class RegridConnector:
     A connector class for fetching construction-relevant parcel data from Regrid's API.
     """
     
-    # Base URLs for Regrid APIs
-    BASE_URL = "https://app.regrid.com/api/v1"
+    # Updated base URLs to match Regrid API v2 endpoints
+    BASE_URL = "https://app.regrid.com/api/v2/us"
     PARCEL_POINT_URL = f"{BASE_URL}/parcel_points"
     PARCEL_DETAILS_URL = f"{BASE_URL}/parcel"
     PARCEL_BOUNDARY_URL = f"{BASE_URL}/parcel_boundary"
     
-    # Construction-relevant fields to extract from responses
+    # Updated construction-relevant fields to align with Regrid schema
     CONSTRUCTION_FIELDS = [
-        'zoning', 
+        'll_uuid',
+        'state_parcelnumb',
+        'address',
+        'lat',
+        'lon',
+        'zoning',
         'zoning_description',
-        'land_use_code', 
-        'land_use_description',
-        'building_area_sq_ft',
-        'land_area_sq_ft',
-        'land_area_acres',
-        'frontage_ft',
-        'depth_ft',
-        'year_built',
-        'building_condition',
-        'total_buildings',
-        'building_height_ft',
-        'setback_front_ft',
-        'setback_rear_ft',
-        'setback_side_ft',
-        'max_building_height_ft',
-        'flood_zone',
-        'sewer_type',
-        'water_type',
-        'electricity',
-        'gas',
-        'topography',
-        'environmental_restrictions',
-        'building_permits'
+        'struct',
+        'structno',
+        'yearbuilt',
+        'numstories',
+        'numunits',
+        'num_rooms',
+        'improvval',
+        'landval',
+        'parval',
+        'roughness_rating',
+        'highest_parcel_elevation',
+        'lowest_parcel_elevation',
+        'gisacre',
+        'sqft'
+    ]
+
+    # Fields relevant to value-add calculations for urban infill construction
+    VALUE_ADD_FIELDS = [
+        'll_uuid',
+        'state_parcelnumb',
+        'address',
+        'lat',
+        'lon',
+        'zoning',
+        'zoning_description',
+        'landval',
+        'improvval',
+        'parval',
+        'saleprice',
+        'saledate',
+        'taxamt',
+        'taxyear',
+        'population_density',
+        'housing_affordability_index',
+        'housing_growth_past_5_years',
+        'housing_growth_next_5_years',
+        'median_household_income',
+        'household_income_growth_next_5_years'
     ]
     
     def __init__(self, api_key: str):
@@ -69,7 +89,7 @@ class RegridConnector:
     
     def lookup_by_coordinates(self, lat: float, lon: float) -> Dict:
         """
-        Look up a parcel by coordinates.
+        Look up a parcel by coordinates using the Regrid API v2.
         
         Args:
             lat: Latitude
@@ -85,7 +105,7 @@ class RegridConnector:
         
         logger.info(f"Looking up parcel at coordinates: ({lat}, {lon})")
         response = requests.get(
-            self.PARCEL_POINT_URL, 
+            f"{self.BASE_URL}/search/parcel/by_coordinates",  # Corrected endpoint
             headers=self.headers, 
             params=params
         )
@@ -102,10 +122,10 @@ class RegridConnector:
         else:
             logger.warning("No parcel found at the specified coordinates")
             return {}
-    
+
     def get_parcel_details(self, parcel_id: str) -> Dict:
         """
-        Get detailed information about a parcel.
+        Get detailed information about a parcel using the Regrid API v2.
         
         Args:
             parcel_id: The unique parcel identifier
@@ -113,24 +133,22 @@ class RegridConnector:
         Returns:
             Dictionary containing detailed parcel information
         """
-        url = f"{self.PARCEL_DETAILS_URL}/{parcel_id}"
+        url = f"{self.BASE_URL}/parcel/{parcel_id}"  # Corrected endpoint
         
         logger.info(f"Fetching details for parcel ID: {parcel_id}")
         response = requests.get(url, headers=self.headers)
         
         if response.status_code == 200:
             data = response.json()
-            # Filter for construction-relevant fields
-            construction_data = self._extract_construction_fields(data)
             logger.info("Successfully retrieved parcel details")
-            return construction_data
+            return data
         else:
             logger.error(f"Error in API call: {response.status_code} - {response.text}")
             response.raise_for_status()
-    
+
     def get_parcel_boundary(self, parcel_id: str) -> Dict:
         """
-        Get the boundary/polygon data for a parcel.
+        Get the boundary/polygon data for a parcel using the Regrid API v2.
         
         Args:
             parcel_id: The unique parcel identifier
@@ -138,7 +156,7 @@ class RegridConnector:
         Returns:
             GeoJSON representation of the parcel boundary
         """
-        url = f"{self.PARCEL_BOUNDARY_URL}/{parcel_id}"
+        url = f"{self.BASE_URL}/parcel/{parcel_id}/boundary"  # Corrected endpoint
         
         logger.info(f"Fetching boundary for parcel ID: {parcel_id}")
         response = requests.get(url, headers=self.headers)
@@ -154,7 +172,7 @@ class RegridConnector:
     def search_parcels_by_address(self, address: str, city: str = None, 
                                   state: str = None, zip_code: str = None) -> List[Dict]:
         """
-        Search for parcels by address components.
+        Search for parcels by address components using the correct Regrid API v2 endpoint.
         
         Args:
             address: Street address
@@ -177,7 +195,7 @@ class RegridConnector:
         
         logger.info(f"Searching for parcels with address: {address}")
         response = requests.get(
-            f"{self.BASE_URL}/search", 
+            f"{self.BASE_URL}/search/parcel/by_address",  # Corrected endpoint
             headers=self.headers, 
             params=params
         )

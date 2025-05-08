@@ -1,0 +1,176 @@
+Regrid Parcel Record Schema,,,,,,Current version:,15.0,
+Column Name,Shapefile Name,Type,Premium,Standard,Examples,Description,First Seen,Seq
+ogc_fid,,serial primary key,✔,✔,,"object ID - Not unique across counties, not persistant over time, use 'll_uuid' preferably below.",1.0,1
+geoid,,text,✔,✔,06205,"A 5 digit county id number, consisting of the 2 digit FIPS state code + the 3 digit FIPS county code.",1.0,2
+parcelnumb,,text,✔,✔,2004940,Parcel ID/Parcel Number,1.0,3
+parcelnumb_no_formatting,parcelnu_1,text,✔,✔,XH0118ROAD00,"This is the county-provided 'parcelnumb' schema attribute, but has all non A-Z and 0-9 characters removed. It is intended to make searching and matching on county parcel number, PIN, or APN easier as formatting and spacing can vary. Please note that sometimes formatting and spacing is required to make parcel numbers unique and as a result this attribute is more likely to have duplicate parcel numbers, it should be used as a last resort for matching.",10.0,4
+state_parcelnumb,state_parc,text,✔,✔,22051-0600003127,Statewide parcel identification number. Collected where available from states that provide a statewide parcel ID.,13.0,5
+account_number,account_nu,text,✔,✔,01234X,The assessor or tax collector's account identification number for a property.,13.0,6
+tax_id,,text,✔,✔,87642-2002,The assessor or tax collector's tax identification number for a property.,13.0,7
+alt_parcelnumb1,alt_parcel,text,✔,✔,RA0580030000,"A county-provided parcel id number that is not considered to be the primary parcel id number used by the county, but is also used as a parcel id in some contexts. These could be previously used parcel numbers, map numbers, online system id numbers, etc. It is provided in this schema attribute for easy, consistent access, but is also duplicated as a county specific custom column to retain its original, county-provided attribute name.",10.0,8
+alt_parcelnumb2,alt_parc_1,text,✔,✔,RA0580030000,"A county-provided parcel id number that is not considered to be the primary parcel id number used by the county, but is also used as a parcel id in some contexts. These could be previously used parcel numbers, map numbers, online system id numbers, etc. It is provided in this schema attribute for easy, consistent access, but is also duplicated as a county specific custom column to retain its original, county-provided attribute name. ",10.0,9
+alt_parcelnumb3,alt_parc_2,text,✔,✔,RA0580030000,"A county-provided parcel id number that is not considered to be the primary parcel id number used by the county, but is also used as a parcel id in some contexts. These could be previously used parcel numbers, map numbers, online system id numbers, etc. It is provided in this schema attribute for easy, consistent access, but is also duplicated as a county specific custom column to retain its original, county-provided attribute name. ",10.0,10
+usecode,,text,✔,✔,104,Parcel Use Code,1.0,11
+usedesc,,text,✔,✔,Residential,Parcel Use Description,1.0,12
+zoning,,text,✔,✔,R-1,Governing municipality's zoning code,2.0,13
+zoning_description,zoning_des,text,✔,✔,Residential,Governing municipality's zoning code description,2.0,14
+zoning_type,zoning_typ,text,✔,,Residential,A standardized zoning type,14.0,15
+zoning_subtype,zoning_sub,text,✔,,Single-family,A standardized zoning subtype,14.0,16
+zoning_code_link,zoning_cod,text,✔,,http://mohavecounty-az.elaws.us/code/coor_ptii_sec11,Direct link to the municipality's zoning code,14.0,17
+zoning_id,,integer,✔,,5656,ID for the zoning area for matching to the full Regrid zoning add-on product,14.0,18
+struct,,boolean,✔,✔,,Structure On Parcel,1.0,19
+structno,,integer,✔,✔,,Number of Structures on Parcel,1.0,20
+yearbuilt,,integer,✔,✔,,Structure Year Built,1.0,21
+numstories,,double precision,✔,✔,,Number of Stories - Can be fractional like 1.5 stories,1.0,22
+numunits,,integer,✔,✔,,"The number of individual living units, apartments or condominiums on a parcel.",1.0,23
+numrooms,,double precision,✔,✔,2.5,The number of rooms in the parcel's primary structure as recorded in county records.,13.0,24
+structstyle,structstyl,text,✔,✔,,Structure Style,1.0,25
+parvaltype,,text,✔,✔,"Appraised, Assessed, Taxable, Market, Market Value",Parcel Value Type - Describes the type or the method the Assessor used to determine and record the values in the parcel value attributes below,1.0,26
+improvval,,double precision,✔,✔,,Improvement Value - in US Dollars (from Assessor's data),1.0,27
+landval,,double precision,✔,✔,,Land Value - in US Dollars (from Assessor's data),1.0,28
+parval,,double precision,✔,✔,,Total Parcel Value - in US Dollars (from Assessor's data),1.0,29
+agval,,double precision,✔,✔,,Agricultural Value - in US Dollars (from Assessor's data),1.0,30
+homestead_exemption,homestead_,text,✔,,homeowner,A county-provided indicator that the parcel is eligible for county-provided exemptions for homeowners / owner occupied structures / homestead tax exemptions.,10.0,31
+saleprice,,double precision,✔,✔,,Last Sale Price - in US Dollars (from Assessor's data),1.0,32
+saledate,,date,✔,✔,,Last Sale Date (from Assessor's data),1.0,33
+taxamt,,double precision,✔,✔,,Annual Tax Bill - in US Dollars (from Assessor's data),1.0,34
+taxyear,,text,✔,✔,2020,"The county provided year the tax related values apply to. When the county specifies a tax year or assessor's tax year, we record it in this attribute. ",8.0,35
+owntype,,text,✔,✔,,Owner Type,1.0,36
+owner,,text,✔,✔,,Owner Name,1.0,37
+unmodified_owner,unmodified,text,✔,✔,,"Owner name before any standardization of punctuation and common government owners, or other details, are modified in any manner.",15.0,38
+ownfrst,,text,✔,✔,,"Owner First Name (note field name uses ""frst"" instead of first.)",1.0,39
+ownlast,,text,✔,✔,,Owner Last Name,1.0,40
+owner2,,text,✔,✔,Rosalind Franklin,Second owner's name,2.0,41
+owner3,,text,✔,✔,Ada Lovelace,Third owner's name,2.0,42
+owner4,,text,✔,✔,Barbara McClintock,Fourth owner's name,2.0,43
+previous_owner,previous_o,text,✔,✔,"Johnson, Katherine",The previous owner or grantor of a parcel.,13.0,44
+mailadd,,text,✔,✔,402 S FOURTH AVE,"Parcel Mailing Address - This is the address where the tax and other assessor's communications are sent. It is often thought of as the owner's mailing address. It is often the same address as the parcel physical street address, but very commonly it is a different address than the parcel address itself. ",1.0,45
+mail_address2,mail_addre,text,✔,✔,,Mailing address second line,2.0,46
+careof,,text,✔,✔,MIKE SMITH,Parcel Mailing Address Care Of,3.0,47
+mail_addno,,text,✔,✔,402,Mailing address street number,2.0,48
+mail_addpref,mail_addpr,text,✔,✔,S,Mailing address street prefix,2.0,49
+mail_addstr,mail_addst,text,✔,✔,FOURTH,Mailing address street name,2.0,50
+mail_addsttyp,mail_add_1,text,✔,✔,AVE,Mailing address street type,2.0,51
+mail_addstsuf,mail_add_2,text,✔,✔,NW,Mailing address street suffix,2.0,52
+mail_unit,,text,✔,✔,APT # 2,Mailing address unit number,2.0,53
+mail_city,,text,✔,✔,Ann Arbor,Mailing address city,2.0,54
+mail_state2,mail_state,text,✔,✔,MI,Mailing address state,2.0,55
+mail_zip,,text,✔,✔,48103; 48104-3423,Mailing address zip code,2.0,56
+mail_country,,text,✔,✔,"US, Indonesia, Canada",Mailing address country,7.0,57
+mail_urbanization,mail_urban,text,✔,✔,Caguas,Mailing Urbanización (Puerto Rico),2.0,58
+original_mailing_address,original_m,text (jsonb),✔,✔,,"Owner mailing address fields as originally provided by the county, encoded as a JSON object. Generated before any cleaning steps are done. ",15.0,59
+address,,text,✔,✔,12109 KATZ RD,"Parcel Physical Street Address - This is the address of the parcel itself. Not every parcel has a street address, especially in agricultural areas and other large parcels. Also called the ""situs address"" or ""site address"".",1.0,60
+address2,,text,✔,✔,George's Ice Cream Shoppe,Additional street address details,2.0,61
+saddno,,text,✔,✔,12109,Parcel Address Number,1.0,62
+saddpref,,text,✔,✔,N,Parcel Address Prefix,1.0,63
+saddstr,,text,✔,✔,GLENN,Parcel Address Street Name,1.0,64
+saddsttyp,,text,✔,✔,RD,Parcel Address Street Type,1.0,65
+saddstsuf,,text,✔,✔,NW,Parcel Address Street Suffix,1.0,66
+sunit,,text,✔,✔,"Apt 2, Unit B",Parcel Address Unit,1.0,67
+scity,,text,✔,✔,GRASS LAKE,Parcel Address City,1.0,68
+original_address,original_a,text,✔,✔,"{""address"":""12340 REID RD"",""saddno"":""123400"",""saddstr"":""REID RD"",""scity"":""DURAND"",""szip"":""48429""}","Parcel Address fields as originally provided by the county, encoded as a JSON object. This field was originally separated by a semicolon and a space and data will exist in that format as a migration happens over time. ",2.0,69
+city,,text,✔,✔,woodstock,US Census County Subdivision - https://www2.census.gov/geo/pdfs/reference/GARM/Ch8GARM.pdf. Used for organizational purposes. Refer to scity for the city associated with the site address.,1.0,70
+county,,text,✔,✔,Livingston,Parcel Address County,1.0,71
+state2,,text,✔,✔,MI,Parcel Address State,1.0,72
+szip,,text,✔,✔,49240,Parcel Address Zip Code,1.0,73
+szip5,,text,✔,✔,48137,5 Digit Parcel Zip Code,13.0,74
+urbanization,urbanizati,text,✔,✔,Caguas,Site Urbanización (Puerto Rico),2.0,75
+ll_address_count,ll_address,integer,✔,,8,"A count of all the addresses we know of existing on a parcel. This includes the primary situs address and all the secondary or unit based addresses in our matched secondary address dataset. It is similar to the county provided 'numunits' in our schema, but calculated by us based on our nationwide address dataset from our address partner.",10.0,76
+location_name,location_n,text,✔,✔,Briarwood Mall,A name commonly associated with this parcel,2.0,77
+address_source,address_so,text,✔,✔,openaddresses;cass;county;ZCTA,Primary source of the address data for the parcel record. Default source if none is listed is the county.,2.0,78
+legaldesc,,text,✔,✔,,Legal Description,1.0,79
+plat,,text,✔,✔,A,Plat number the parcel is recorded on,2.0,80
+book,,text,✔,✔,231,Book/Liber the parcel is recorded in,2.0,81
+page,,text,✔,✔,2,Page/Folio the parcel is recorded on,2.0,82
+block,,text,✔,✔,,Parcel block,2.0,83
+lot,,text,✔,✔,,Parcel lot,2.0,84
+neighborhood,neighborho,text,✔,✔,Old West Side,Neighborhood name,2.0,85
+neighborhood_code,neighbor_1,text,✔,✔,,An alpha numeric code labeled from the source as a neighborhood code,15.0,86
+subdivision,subdivisio,text,✔,✔,,Subdivision,1.0,87
+lat,,text,✔,✔,42.1342,"Decimal latitude coordinate (EPSG:4326). Guaranteed to be a point within the parcel. Usually this is the center or ""centroid"" of the parcel. When the center of the parcel is not actually in the parcel boundary, we move the point to the parcel itself.",8.0,88
+lon,,text,✔,✔,112.2342,"Decimal longitude coordinate (EPSG:4326). Guaranteed to be a point within the parcel. Usually this is the center or ""centroid"" of the parcel. When the center of the parcel is not actually in the parcel boundary, we move the point to the parcel itself.",8.0,89
+fema_flood_zone,fema_flood,text,✔,,A,FEMA Flood Zone per the Flood Insurance Rate Map (FIRM). Zones beginning with A or V represent the highest level of flood risk. More info here: https://www.fema.gov/glossary/flood-zones,13.0,90
+fema_flood_zone_subtype,fema_flo_1,text,✔,,1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN STRUCTURE,FEMA Flood Zone Subtype per the Flood Insurance Rate Map (FIRM) providing specific details around the associated Flood Zone.,13.0,91
+fema_flood_zone_raw,fema_flo_2,text,✔,,"[{""zone"":""A"",""subtype"":""1 PCT ANNUAL CHANCE FLOOD HAZARD CONTAINED IN STRUCTURE"",""percent"":0.18},{""zone"":""A"",""subtype"":""RIVERINE FLOODPLAIN IN COASTAL AREA"",""percent"":0.04},{""zone"":""X"",""subtype"":""AREA OF MINIMAL FLOOD HAZARD"",""percent"":0.29}]",JSON field containing more complex details related to the Flood Zone specifically in instances where multiple Flood Zones are associated with a property.,13.0,92
+fema_flood_zone_data_date,fema_flo_3,date,✔,,2023-09-01,The Effective Date of the Flood Insurance Rate Map (FIRM) for the associated Flood Zone and property.,13.0,93
+fema_nri_risk_rating,fema_nri_r,text,✔,,,"Sourced from FEMA's National Risk Index; the Risk Rating leverages available source data for natural hazard and community risk factors to develop a baseline relative risk measurement for each U.S. Census tract for all 50 states, the District of Columbia (DC), American Samoa (AS), Commonwealth of the Northern Mariana Islands (MP), Guam (GU), Puerto Rico (PR), and the U.S. Virgin Islands (VI). The National Risk Rating is intended to help users better understand the natural hazard risk of their communities by providing a category range from “Very Low” to “Very High.” A ""No Rating"" designation does not equate to a null value. It typically means that the area has no measurable building, population, or agricultural value exposed to a specific hazard, or that the calculated annualized loss (EAL) for that hazard is zero. More details on this methodology can be found in FEMA’s technical documentation: https://www.fema.gov/sites/default/files/documents/fema_national-risk-index_technical-documentation.pdf",15.0,94
+qoz,,text,✔,✔,Yes or No,Is this parcel in a US Federal Qualified Opportunity Zone,4.0,95
+qoz_tract,,text,✔,✔,"30059000100, 30107000100","Census tract number as it was defined in Dec 2018 when QOZs were designated. 
+Data from: https://www.cdfifund.gov/Pages/Opportunity-Zones.aspx
+https://www.irs.gov/newsroom/opportunity-zones-frequently-asked-questions",4.0,96
+census_tract,census_tra,text,✔,✔,26091061800,2020 Census tract,2.0,97
+census_block,census_blo,text,✔,✔,260910618004006,2020 Census block,2.0,98
+census_blockgroup,census_b_1,text,✔,✔,260910618004,2020 Census blockgroup,2.0,99
+census_zcta,census_zct,text,✔,✔,70067,The Census Zip Code Tabulation Area (ZCTA) in which the center of the parcel is located.,13.0,100
+census_elementary_school_district,census_ele,text,✔,,Alhambra Elementary District,"Census defined ""elementary"" school district is responsible for providing education for children ages 5-17. If students are divided by age by the local authorities the younger ages will be reflected here with the older ages reflected in ""census_secondary_school_district""",13.0,101
+census_secondary_school_district,census_sec,text,✔,,Hoosac Valley School District in Savoy (7-12),"Census designated ""secondary"" school district is responsible for providing education for children aged 5-17 that have been determined by local authories to be above a specified age.",13.0,102
+census_unified_school_district,census_uni,text,✔,,St. Marys City School District,"Census designated ""unified"" school district responsible for providing education for all children ages 5-17.",13.0,103
+ll_last_refresh,ll_last_re,date,✔,✔,2022-01-19,"This is the date we most recently refreshed the data from the county source. ll_last_refresh is the same for every parcel, as it applies to the county data as a whole. 'll_last_refresh' should be the same value as 'last_refresh' in the 'verse' table file.",10.0,104
+sourceurl,,text,✔,✔,,A county provided url to the county parcel record online,1.0,105
+recrdareatx,recrdareat,text,✔,✔,,"Recorded Area (text) (deprecated - unused, to be removed)",1.0,106
+recrdareano,recrdarean,integer,✔,✔,2432,"Recorded Area (number)
+This is the Assessor's recorded structure square footage",1.0,107
+deeded_acres,deeded_acr,double precision,✔,✔,,"Acres listed as ""deeded acres"" by the county. Often different and separate from acreage calculated by GIS.",15.0,108
+gisacre,,double precision,✔,✔,0.43,Acres value provided by the source,1.0,109
+sqft,,double precision,✔,✔,23392,Parcel Square Feet value provided by the source,3.0,110
+ll_gisacre,,double precision,✔,✔,1.435,Parcel acres as calculated by Regrid from county parcel geometry,5.0,111
+ll_gissqft,,integer,✔,✔,32829,Parcel square feet as calculated by Regrid from supplied parcel geometry,5.0,112
+ll_bldg_footprint_sqft,ll_bldg_fo,integer,✔,,2649,Total building footprint in square feet as calculated by Regrid. Derived from NAIP imagery and refreshed on a 3 year cycle.,5.0,113
+ll_bldg_count,ll_bldg_co,integer,✔,,1,Total number of buildings on the parcel as calculated by Regrid. Can be used to indicate if a parcel is vacant land or not. Derived from NAIP imagery and refreshed on a 3 year cycle.,5.0,114
+cdl_raw,,text,✔,,"[[141, 67.2], [190, 31.1], [176, 1.6]]","A variable length array of 2-member arrays indicating the Cropland Data Layer (CDL) values in position 1, and the percentage of the parcel area covered by that value in the parcel in position 2. Typical parcels have 2-10 different CDL values, and hopefully one predominates in covering the parcel. CDL values can also be grouped. 'value' is the USDA term for the number code that corresponds to a particular crop type or other land cover type, (1, 2, 3 ... 254, but only about 100 numbers used in that range currently by USDA). The human readable label for that 'value' is called the 'category'. A key file providing value and category mappings and link to the USDA references is available here Cropland Data Layer Key [Available for parcels 10 acres or larger.] ",7.0,115
+cdl_majority_category,cdl_majori,text,✔,,"corn, wheat, soybean","Human readable label for the majority CDL value. Cropscape and CDL documentation use the term ""category"" to describe these, so that is why we use 'category' in this attribute name. [Available for parcels 10 acres or larger.] ",7.0,116
+cdl_majority_percent,cdl_majo_1,double precision,✔,,32.3,Percentage of the parcel that the 'cdl_majority_category' covers. We intend 'cdl_majority_category' and 'cdl_majority_percent' to be used together and we include these attributes individually for easy access when doing application development or analysis. [Available for parcels 10 acres or larger.] ,7.0,117
+cdl_date,,text,✔,,2019-02-01,"Cropland Data Layer (CDL) date. Usually released in February, annually, for the previous year. [Available for parcels 10 acres or larger.] ",7.0,118
+plss_township,plss_towns,text,✔,✔,005S,"Based on the centroid of the parcel, the Public Land Survey System township the parcel is located in. A parcel may cross township, range and/or section lines, we record the location of the center of parcel for reference. These are not county provided values and are derived from the Bureau of Land Management designated polygons.",10.0,119
+plss_section,plss_secti,text,✔,✔,Section 09,"Based on the centroid of the parcel, the Public Land Survey System section the parcel is located in. A parcel may cross township, range and/or section lines, we record the location of the center of parcel for reference. These are not county provided values and are derived from the Bureau of Land Management designated polygons.",10.0,120
+plss_range,,text,✔,✔,003E,"Based on the centroid of the parcel, the Public Land Survey System range the parcel is located in. A parcel may cross township, range and/or section lines, we record the location of the center of parcel for reference. These are not county provided values and are derived from the Bureau of Land Management designated polygons.",10.0,121
+reviseddate,reviseddat,date,✔,✔,,The last date of last revision as provided by the county assessor's office if available. ,1.0,122
+path,,text,✔,✔,"/us/mi/wayne/detroit/123, /us/fl/456",A Regrid human-readable ID for this parcel. Not guaranteed to be stable between updates. Use ll_uuid for a permanent and persistent Regrid parcel id. ,1.0,123
+ll_stable_id,ll_stable_,text,✔,✔,"'parcelnumb', 'address', 'geometry', 'preserved'  or null","Indicates if the 'll_uuid' value has changed or was newly assigned during the last refresh from the county. A 'null' indicates a new ll_uuid and path were generated because the new data was not matched to any existing data during the county data refresh process. If there is any value in this field besides a NULL or empty string, it means we were able to match the refreshed parcel with a parcel in our previous data. The available non-null values are 'parcelnumb', 'address', 'geometry' or 'preserved' and they indicate what attribute we used to match the refreshed parcel to the previous parcel. 'preserved' is a legacy value and just indicates that the ll_uuid was carried forward from the previous data.",2.0,124
+ll_uuid,,uuid,✔,✔,4cc9eda6-883c-4f38-9a07-b44900a64b16,Uniquely identifies a single parcel. A stable parcel id across county data refreshes. It is the value that should be used for tracking individual parcels. It is also the value that should be used for linking to any other data or as a foreign key.,3.0,125
+ll_stack_uuid,ll_stack_u,text,✔,✔,4cc9eda6-883c-4f38-9a07-b44900a64b16,"A universal unique id for a ""stack"" of parcels. The same ll_stack_uuid is assigned to every parcel in a group of parcels with exactly the same geometry, what we call a ""stack"". Only parcels that are are part of stack of parcels will have a ll_stack_uuid, all other parcels will have a NULL for this attribute. Released on Oct. 17th, 2022",11.0,126
+ll_row_parcel,ll_row_par,text,✔,,"parcel_number, land_use, perimeter_ratio, hull_ratio",A Regrid provided flag that indicates a Right-Of-Way parcel or similar function parcel. The value provided is the primary reason the parcel was flagged as a ROW parcel.,12.0,127
+ll_updated_at,ll_updated,timestamptz,✔,✔,2019-06-06 12:45:21.285102-04,"Timestamp of the most recent change of any kind to this row in the table including internal changes to the record, and/or county updates. ll_last_refresh should be used for the date of the parcel data.",3.0,128
+precisely_id,precisely_,text,✔,,,"PreciselyID represents a point addressable location.  If a location has multiple alias addresses (alias street names, vanity city names, etc), it will receive the same PreciselyID ",15.0,129
+placekey,,text,✔,,227-223@5vg-82n-pgk,A unique ID for a geographic place used for linking different geospatial datasets and addresses. See: https://www.placekey.io/ ,14.0,130
+dpv_status,,text,✔,,V/N,USPS delivery point validation status code. Indicates if the USPS considers the address as a valid delivery point or not.,2.0,131
+dpv_codes,,text,✔,,YN NN,Detailed delivery point validation codes. See: https://support.regrid.com/parcel-data/cass-codes,2.0,132
+dpv_notes,,text,✔,,AAM3,Delivery point validation notes. See: https://support.regrid.com/parcel-data/cass-codes,2.0,133
+dpv_type,,text,✔,,"H (High Rise), S (Street)","Type of the delivery point match. H indicates more than one unit for the street address, it could be as few as two units in a duplex, the ""highrise"" description is misleading, any address with multiple units will have the H type, regardless of the physical structures on the parcel.",2.0,134
+cass_errorno,cass_error,text,✔,,"11.14,14.5,14.7,15.2,A1",CASS Certification error codes. See: https://support.regrid.com/parcel-data/cass-codes,2.0,135
+rdi,,text,✔,,Y/N,Residential Delivery Indicator,2.0,136
+usps_vacancy,usps_vacan,text,✔,,Y for Vacant,"USPS vacancy indicator. Indicates if an address is considered vacant or occupied. Usually means the address is still active, just temporarily empty for some number of weeks to months. Does not indicate vacant land.",2.0,137
+usps_vacancy_date,usps_vac_1,date,✔,,2020-09-15,Date of the USPS data used for all USPS related attributes.,2.0,138
+padus_public_access,padus_publ,text,✔,,"""Open Access"", ""Restricted Access"", ""Unknown (Closed)"", ""Closed""",United States Geological Survey Protected Areas Database of the United States Public Access designation.,8.0,139
+lbcs_activity,lbcs_activ,numeric,✔,,"1000,2000,3000 (100% standardized values, see url)","Actual use of land: farming, shopping, manufacturing. See https://www.planning.org/lbcs/standards/activity/",2.0,140
+lbcs_activity_desc,lbcs_act_1,text,✔,,,Description of the LBCS numeric code,6.0,141
+lbcs_function,lbcs_funct,numeric,✔,,"1000,2000,3000 (100% standardized values, see url)","Economic function or type of establishment: agricultural, commercial, industrial. See https://www.planning.org/lbcs/standards/function/",2.0,142
+lbcs_function_desc,lbcs_fun_1,text,✔,,,Description of the LBCS numeric code ,6.0,143
+lbcs_structure,lbcs_struc,numeric,✔,,"1000,2000,3000 (100% standardized values, see url)","Type of structure or building: single-family house, office building, warehouse. See https://www.planning.org/lbcs/standards/structure/",2.0,144
+lbcs_structure_desc,lbcs_str_1,text,✔,,,Description of the LBCS numeric code ,6.0,145
+lbcs_site,,numeric,✔,,"1000,2000,3000 (100% standardized values, see url)",What is on the land. See https://www.planning.org/lbcs/standards/site/,2.0,146
+lbcs_site_desc,lbcs_site_,text,✔,,,Description of the LBCS numeric code ,6.0,147
+lbcs_ownership,lbcs_owner,numeric,✔,,"1000,2000,3000 (100% standardized values, see url)","Ownership structure: public, private. See https://www.planning.org/lbcs/standards/ownership/",2.0,148
+lbcs_ownership_desc,lbcs_own_1,text,✔,,,Description of the LBCS numeric code,6.0,149
+housing_affordability_index,housing_af,numeric,✔,,,"Housing Affordability Index (HAI) measures the ability of a typical resident to purchase a home in the geographic area. The HAI has a base of 100, representing where the median income is sufficient to qualify for a loan on a median-valued home and not be cost-burdened (cost-burdened=greater than 30% of income spent on housing). HAI values > 100 indicate increasing affordability; HAI values < 100 indicate areas where homes are less affordable and median income might be insufficient to purchase a median-valued home. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.",15.0,150
+population_density,population,numeric,✔,,,"Estimate of the Population Density (population per Square Mile) in the geographic area. Population density is computed by dividing the total population within the geographic area by the total land area, measured in square miles. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.",15.0,151
+population_growth_past_5_years,populati_1,numeric,✔,,,"Population Compound Annual Growth Rate (CAGR) for the previous 5 year period, is an annualized measure describing the direction (either positive or negative) and magnitude of change in the total number of persons between the previous 5 years. Annualized means that the resultant value reflects a rate of change over a twelve-month time period. This permits analysis of multiple growth rates between values measured at differing points in time using a common time period of twelve months; the annualized growth rate is repeated, or compounded, each year. The CAGR is sometimes referred to as growth rate, annual rate, annualized growth rate, or compound growth rate. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.  These values are expressed as percentages and should be read as-is. For example, a value of 0.15 represents 0.15%, not 15%. Further details can be found on the Esri Location Data Dictionary: https://doc.arcgis.com/en/esri-demographics/latest/reference/essential-vocabulary.htm",15.0,152
+population_growth_next_5_years,populati_2,numeric,✔,,,"Five-year forecast for Population Growth: Compound Annual Growth Rate (CAGR). The Population Growth CAGR is an annualized measure that describes the direction (either positive or negative) and magnitude of change in population between the current year and that year plus 5. The CAGR is sometimes referred to as growth rate, annual rate, annualized growth rate, or compound growth rate. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.  These values are expressed as percentages and should be read as-is. For example, a value of 0.15 represents 0.15%, not 15%. Further details can be found on the Esri Location Data Dictionary: https://doc.arcgis.com/en/esri-demographics/latest/reference/essential-vocabulary.htm",15.0,153
+housing_growth_past_5_years,housing_gr,numeric,✔,,,"Housing Units Compound Annual Growth Rate (CAGR) for the previous five year period, is an annualized measure describing the direction (either positive or negative) and magnitude of change in the total number of housing units between the previous 5 years. Annualized means that the resultant value reflects a rate of change over a twelve-month time period. This permits analysis of multiple growth rates between values measured at differing points in time using a common time period of twelve months; the annualized growth rate is repeated, or compounded, each year. The CAGR is sometimes referred to as growth rate, annual rate, annualized growth rate, or compound growth rate. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.  These values are expressed as percentages and should be read as-is. For example, a value of 0.15 represents 0.15%, not 15%. Further details can be found on the Esri Location Data Dictionary: https://doc.arcgis.com/en/esri-demographics/latest/reference/essential-vocabulary.htm",15.0,154
+housing_growth_next_5_years,housing__1,numeric,✔,,,"Five-year forecast for Housing Units: Compound Annual Growth Rate (CAGR). The Housing Unit CAGR is an annualized measure that describes the direction (either positive or negative) and magnitude of change in total housing units between the current year and that year plus 5. The CAGR is sometimes referred to as growth rate, annual rate, annualized growth rate, or compound growth rate. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.  These values are expressed as percentages and should be read as-is. For example, a value of 0.15 represents 0.15%, not 15%. Further details can be found on the Esri Location Data Dictionary: https://doc.arcgis.com/en/esri-demographics/latest/reference/essential-vocabulary.htm",15.0,155
+household_income_growth_next_5_years,household_,numeric,✔,,,"Five-year forecast for Median Household Income: Compound Annual Growth Rate (CAGR). The Median Household Income CAGR is an annualized measure that describes the direction (either positive or negative) and magnitude of change in the total Median Household Income between the current year and that year plus 5. The CAGR is sometimes referred to as growth rate, annual rate, annualized growth rate, or compound growth rate. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.  These values are expressed as percentages and should be read as-is. For example, a value of 0.15 represents 0.15%, not 15%. Further details can be found on the Esri Location Data Dictionary: https://doc.arcgis.com/en/esri-demographics/latest/reference/essential-vocabulary.htm",15.0,156
+median_household_income,median_hou,numeric,✔,,,"Estimate of Median Household Income in the geographic area for the previous year. Median Household Income is the amount that divides household income (annual income for all household earners age 15+) into two equal groups in a geographic area; half of the population will have income higher than the median and half will have lower income. If the median falls in the upper income interval of $200,000+, it is represented by the value of $200,001. Esri uses the U.S. Census definition of income. This attribute is calculated at the Census Block Group in which the parcel is located. Source: US Census Bureau via ESRI. Updated each July representing previous year.",15.0,157
+transmission_line_distance,transmissi,numeric,✔,,,Sourced from HIFLD; provides the distance in meters from the parcel boundary to the nearest relatively high voltage (69kv - 765kv) electric transmission line as available within the Homeland Infrastructure Foundation-Level Data (HIFLD) Transmission Line dataset (https://hifld-geoplatform.hub.arcgis.com/datasets/geoplatform::transmission-lines/about),15.0,158
+roughness_rating,roughness_,numeric,✔,,,"The amount of elevation variability within a parcel. Calculated per parcel from Digital Elevation Model (DEM).
+0 = a level terrain surface
+1 = a nearly level terrain surface
+2 = a slightly rugged terrain surface
+3 = an intermediately rugged terrain surface
+4 = a moderately rugged terrain surface
+5 = a highly rugged terrain surface
+6 = an extremely rugged terrain surface
+Additional details at: https://support.regrid.com/parcel-data/parcel-elevation-faq",15.0,159
+highest_parcel_elevation,highest_pa,numeric,✔,,,"Highest elevation value (meters) intersecting the parcel calculated using best available terrain data. Calculated for each parcel
+Additional details at: https://support.regrid.com/parcel-data/parcel-elevation-faq",15.0,160
+lowest_parcel_elevation,lowest_par,numeric,✔,,,"Lowest elevation value (meters) intersecting the parcel calculated using best available terrain data. Calculated for each parcel.
+Additional details at: https://support.regrid.com/parcel-data/parcel-elevation-faq",15.0,161
