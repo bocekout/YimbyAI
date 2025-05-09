@@ -1,8 +1,17 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&display=swap");
+
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 300; /* light */
+}
+
+h2 {
+  font-family: "Noto Sans", sans-serif;
+  font-weight: 300; /* normal */
 }
 
 #map {
@@ -42,15 +51,156 @@ body {
 }
 
 .modal {
+  width: 650px;
+  height: 420px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 30px;
-  border-radius: 8px;
+  /* padding: 30px; */
+  border-radius: 50px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   z-index: 1000;
+}
+
+.modal-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* or whatever fixed height you need */
+  background: #fefefe;
+}
+
+/* 1. Messages area */
+.modal-messages {
+  flex: 1; /* take all remaining space above the divider */
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.message {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: #f1f1f1; /* ChatGPT-style bubble */
+  align-self: flex-start;
+}
+
+.message.user {
+  background: #daffe6;
+  align-self: flex-end;
+}
+
+/* 2. Divider line */
+.modal-divider {
+  height: 1px;
+  background: #ddd;
+  margin: 0 0;
+}
+
+/* 3. Bottom input area */
+.modal-input-area {
+  position: relative;
+  height: 150px;
+  padding: 15px;
+  box-sizing: border-box;
+  background: #fafafa;
+}
+
+.modal-input {
+  width: 100%;
+  height: 120px;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  border: none;
+  outline: none;
+  border-radius: 8px;
+  font-size: 14px;
+  resize: none; /* if you prefer a <textarea> */
+}
+
+.icon-btn {
+  position: absolute;
+  bottom: 25px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 4. Send button */
+.send-btn {
+  right: 25px; /* match your .modal-input padding */
+  background: #4d4d4d;
+  color: #fff;
+}
+
+/* Optional hover/focus states */
+.send-btn:hover {
+  background: #0056b3;
+}
+
+/* when .with-house is applied to the input-area… */
+.send-btn-moved {
+  right: 80px !important ; /* push the message button left by the width+spacing of the new button */
+}
+
+.options-btn {
+  right: 25px;
+  background: #4adc6e;
+  color: #fff;
+}
+
+.options-btn:hover {
+  background: #246c36;
+}
+
+.modal-content-header {
+  height: 150px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  align-items: center; /* vertical centering */
+  padding: 0 70px;
+}
+
+/* reset the h2 so it truly sits centered */
+.modal-content-header h2 {
+  margin: 0; /* kill default margins */
+  line-height: 1; /* ensure no extra line-height padding */
+}
+
+.modal-content-main {
+  width: calc (100% - 140px);
+  size: 12px;
+  padding: 30px 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 1em; /* space between items */
+}
+
+.modal-content-main input {
+  width: 100%;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 10px;
+  border: 1px solid #a3a3a3;
+  padding: 0 15px;
+}
+
+.modal-content-main button {
+  border: none;
+  border-radius: 15px;
+  width: 150px;
+  height: 60px;
+  margin: 0 auto; /* ← centers it horizontally */
 }
 
 .modal-content h2 {
@@ -69,8 +219,8 @@ body {
   right: 20px !important;
   left: auto !important;
   transform: none !important;
-  width: 300px;
-  height: calc(100% - 100px);
+  width: 400px;
+  height: calc(100% - 40px);
   overflow-y: auto;
 }
 
@@ -80,7 +230,17 @@ body {
   left: auto !important;
   transform: none !important;
   width: calc(50% - 100px);
-  height: calc(100% - 100px);
+  height: calc(100% - 40px);
+  overflow: hidden;
+}
+
+.modal.full-wide {
+  top: 20px !important;
+  right: auto !important;
+  left: 200px !important;
+  transform: none !important;
+  width: calc(100% - 400px);
+  height: calc(100% - 40px);
   overflow: hidden;
 }
 
@@ -96,37 +256,31 @@ body {
   column-gap: 50px;
 }
 
-.option-container {
-  border: 1px solid #ccc;
-  padding: 50px;
-  box-sizing: border-box;
-}
-
-.option-container img {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-
-.option-container p {
-  margin-top: 10px;
+.options-content h3 {
+  padding: 20px;
 }
 
 .options-scroll {
+  /* border-bottom: 1px solid #575757;
+  border-top: 1px solid #575757; */
+
   flex: 1;
   overflow-y: auto;
-  padding-right: 10px;
+  /* padding-right: 10px; */
+  padding: 20px;
 }
 
 .options-grid {
+  height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  margin-top: 15px;
+  /* margin: 15px; */
+  /* padding: 30px 0; */
 }
 
 .option-item img {
+  margin: 5px;
   display: block;
   width: 100%;
   height: auto;
@@ -143,18 +297,25 @@ body {
   outline-offset: 2px;
 }
 
+.bottom-divider {
+  margin-top: 30px;
+}
+
 .buttons {
+  padding: 20px;
   display: flex;
   justify-content: space-between;
-  margin-top: 15px;
+  margin: 20px 0;
 }
 
 .buttons button {
   flex: 1;
   margin: 0 5px;
-  padding: 10px;
+  padding: 20px;
   font-size: 1em;
   cursor: pointer;
+  border: none;
+  border-radius: 15px;
 }
 
 .option-rect {
@@ -188,6 +349,43 @@ body {
   background-color: #363636;
 }
 
+.option-container {
+  padding: 50px;
+  box-sizing: border-box;
+}
+
+.option-container img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  /* margin: 20px auto; <-- centers it horizontallys */
+}
+
+.option-container p {
+  margin-top: 10px;
+}
+
+.back-btn {
+  position: absolute;
+  bottom: 50px; /* distance from bottom of .modal-content */
+  left: 50px; /* distance from left edge */
+  border-radius: 15px;
+  border: none; /* no border */
+  padding: 4px 8px; /* small hit-area */
+  font-size: 12px; /* smaller text */
+  color: #555; /* subtle color */
+  cursor: pointer;
+}
+
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+.dashboard {
+  padding: 50px;
+}
+
 .dashboard-header {
   display: flex;
   align-items: flex-start;
@@ -210,7 +408,7 @@ body {
 
 .finance-box img {
   display: block;
-  width: 100%;
+  width: 300px;
   height: auto;
 }
 
