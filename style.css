@@ -444,9 +444,9 @@ h2 {
 
 .back-btn {
   position: absolute;
-  bottom: 50px; /* distance from bottom of .modal-content */
-  left: 50px; /* distance from left edge */
-  border-radius: 15px;
+  bottom: 20px; /* distance from bottom of .modal-content */
+  left: 20px; /* distance from left edge */
+  border-radius: 25px;
   border: none; /* no border */
   padding: 4px 8px; /* small hit-area */
   font-size: 12px; /* smaller text */
@@ -494,18 +494,24 @@ h2 {
   padding: 15px;
   border-radius: 8px;
   text-align: center;
+
+  /* ensure its contents stack and stretch */
+  display: flex;
+  flex-direction: column;
+}
+.finance-data-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto auto;
+  gap: 15px;
+  margin-top: 10px;
 }
 
-.finance-box h4 {
-  margin: 0 0 10px;
-  font-size: 1.2em;
-}
-
-.finance-box img {
-  display: block;
+/* each image fills its grid cell */
+.finance-data-row img {
   width: 100%;
-  /* max-width: 300px; */
-  /* height: 100%; */
+  height: auto;
+  border-radius: 4px;
 }
 
 /* 3. Data row */

@@ -133,7 +133,7 @@ function additionalInfo() {
     <div class="message">Hello, how can I help you?</div>
     <div class="message user">I’d like to build an ADU on my lot.</div>
     <div class="message">Great! Let’s go through the requirements...</div>
-    <div class="message user">It's a 6,000 sq ft R1 zoned lot at 123 Maple St.</div>
+    <div class="message user">It's a 6,000 sq ft R1 zoned lot at 2508 Lorentz Pl N</div>
     <div class="message">You can build up to 800 sq ft. Would you like to see design options?</div>
     <div class="message user">Yes, please!</div>
     <div class="message">Here are some layout suggestions based on your constraints...</div>
@@ -205,19 +205,6 @@ Cost 💰💰💰💰💰 (5/5)<br>
 GHG Impact 🌳🌳🌳 (3/5)`
   ];
 
-  // const itemsHtml = optionImages
-  //   .map((src, i) => {
-  //     const isActive = i < 3; // only Opt1–Opt3 active
-  //     return `
-  //     <div class="option-item ${isActive ? 'active' : 'non-active'}" data-idx="${i}">
-  //       <img src="${src}" alt="Option ${i + 1}">
-  //       ${!isActive
-  //         ? `<div class="overlay">Not available due to site constraints</div>`
-  //         : ''}
-  //     </div>
-  //   `;
-  //   })
-  //   .join('');
 
   const itemsHtml = optionImages
     .map((src, i) => {
@@ -331,25 +318,26 @@ function compareOptions() {
   modal.innerHTML = `
       <div class="modal-content compare-options-modal ">
         <div class="option-container">
-        <h3>Option 1</h3>
+        <h3>ADU over garage</h3>
           <img src="assets/Compare_Option_1.png" alt="Compare Option 1">
           <div>
-            <p>Data point A</p>
+
+            <p>Difficulty 🌶️🌶️🌶️ (3/5)</p>
             <div class="modal-divider"></div>
-            <p>Data point B</p>
+            <p>Cost 💰💰💰💰 (4/5)</p>
             <div class="modal-divider"></div>
-            <p>Data point C</p>
+            <p>GHG Impact 🌳🌳 (2/5)</p>
           </div>
         </div>
         <div class="option-container">
-        <h3>Option 2</h3>
+        <h3>Duplex in collaboration with neighbor</h3>
           <img src="assets/Compare_Option_2.png" alt="Compare Option 2">
           <div>
-            <p>Data point A</p>
+            <p>Difficulty 🌶️🌶️🌶️🌶️ (4/5)</p>
             <div class="modal-divider"></div>
-            <p>Data point B</p>
+            <p>Cost 💰💰💰💰💰 (5/5)</p>
             <div class="modal-divider"></div>
-            <p>Data point C</p>
+            <p>GHG Impact 🌳🌳🌳 (3/5)</p>
           </div>
         </div>
 
@@ -365,14 +353,18 @@ function financialReport() {
   modal.innerHTML = `
     <div class="modal-content dashboard">
       <!-- 1. Title as a direct child -->
-      <h3 class="dashboard-title">AADU Project at 2508 Lorentz Pl N</h3>
+      <h3 class="dashboard-title">AADU Project at 2508 Lorentz Pl N - ADU over garage project</h3>
 
       <!-- 2. Top row: image + finance -->
       <div class="dashboard-row header-row">
         <img src="assets/Compare_Option_1.png" alt="ADU Option">
         <div class="finance-box">
-          <h4>Project Timeline</h4>
-          <img src="assets/stonks_line.png" alt="Financial Chart">
+          <h4>Project Finances</h4>
+          <div class="finance-data-row">
+            <img src="assets/FinanceData1.png" alt="Finance Data 1">
+            <img src="assets/FinanceData2.png" alt="Finance Data 2">
+            <img src="assets/FinanceData3.png" alt="Finance Data 3">
+          </div>
         </div>
       </div>
 
