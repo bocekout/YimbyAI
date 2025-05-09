@@ -29,6 +29,25 @@ L.tileLayer(
 
 const zoomLevelSecondary = 20.7;
 
+const iconSizeX = 420;
+const iconSizeY = 568;
+const iconSizeLarge = 423;
+const iconSizeYLarge = 687;
+
+const multiplier = 0.9;
+const finalIconSizeX = iconSizeX * multiplier;
+const finalIconSizeY = iconSizeY * multiplier;
+const xMove = 90;
+const yMove = -20;
+const finalAnchorX = finalIconSizeX * 0.5 + xMove;
+const finalAnchorY = finalIconSizeY * 0.5 + yMove;
+
+const finalIconSizeXLarge = iconSizeLarge * multiplier;
+const finalIconSizeYLarge = iconSizeYLarge * multiplier;
+
+const finalAnchorXLarge = finalIconSizeXLarge * 0.5 + xMove;
+const finalAnchorYLarge = finalIconSizeYLarge * 0.5 + yMove;
+
 function resetModal() {
   const modal = document.getElementById('modal');
   modal.classList.remove('corner', 'wide', 'full-wide');
@@ -70,32 +89,17 @@ function closeModal() {
   </div>
 </div>
 `
-  const iconSizeX = 420;
-  const iconSizeY = 568;
-  const multiplier = 0.9;
-  const finalIconSizeX = iconSizeX * multiplier;
-  const finalIconSizeY = iconSizeY * multiplier;
-  const xMove = 90;
-  const yMove = -20;
-  const finalAnchorX = finalIconSizeX * 0.5 + xMove;
-  const finalAnchorY = finalIconSizeY * 0.5 + yMove;
 
   // Zoom and pan map
   map.flyTo([47.641863557630266, -122.35323335375799], zoomLevelSecondary, { duration: 0.75 });
 
   // Delay showing rectangles by 1000ms
-  const siteRect = document.getElementById('site-rect');
-  const offsetRect = document.getElementById('offset-rect');
   const customPin = L.icon({
     iconUrl: 'assets/zoning_mockup.svg',   // path to your SVG
     iconSize: [finalIconSizeX, finalIconSizeY],             // adjust to your SVG’s intrinsic size
     iconAnchor: [finalAnchorX, finalAnchorY],             // [half-width, full-height] → bottom-center
   });
   setTimeout(() => {
-    // if (siteRect) siteRect.style.display = 'block';
-    // if (offsetRect) offsetRect.style.display = 'block';
-
-
     // 2. Add it at your chosen lat/lng
     const marker = L.marker([47.64181476395757, -122.35323469486246], { icon: customPin })
       .addTo(map)
@@ -161,15 +165,16 @@ function additionalInfo() {
 }
 
 const optionImages = [
-  './assets/Option_1.png',
-  './assets/Option_2.png',
-  './assets/Option_3.png',
-  './assets/Option_3.png',
-  './assets/Option_3.png',
-  './assets/Option_2.png',
-  './assets/Option_2.png',
-  './assets/Option_1.png',
-  './assets/Option_3.png',
+  './assets/Opt1.png',
+  './assets/Opt2.png',
+  './assets/Opt3.png',
+  './assets/Opt4.png',
+  './assets/Opt5.png',
+  './assets/Opt6.png',
+  './assets/Opt7.png',
+  './assets/Opt8.png',
+  './assets/Opt9.png',
+  './assets/Opt10.png'
 ];
 
 function designOptions() {
@@ -177,12 +182,57 @@ function designOptions() {
   modal.classList.remove('corner');
   modal.classList.add('wide');
 
-  // build the items
-  const itemsHtml = optionImages.map((src, i) => `
-      <div class="option-item" data-idx="${i}">
+  // const optionDescriptions = [
+  //   "ADU over garage, difficulty intermediate",
+  //   "ADU on the site",
+  //   "Duplex in collaboration with neighbor"
+  // ];
+
+  const optionDescriptions = [
+    `ADU over garage <br>
+Difficulty 🌶️🌶️🌶️ (3/5)<br>
+Cost 💰💰💰💰 (4/5)<br>
+GHG Impact 🌳🌳 (2/5)`,
+
+    `ADU on the site<br>
+Difficulty 🌶️🌶️ (2/5)<br>
+Cost 💰💰💰 (3/5)<br>
+GHG Impact 🌳 (1/5)`,
+
+    `Duplex in collaboration with neighbor<br>
+Difficulty 🌶️🌶️🌶️🌶️ (4/5)<br>
+Cost 💰💰💰💰💰 (5/5)<br>
+GHG Impact 🌳🌳🌳 (3/5)`
+  ];
+
+  // const itemsHtml = optionImages
+  //   .map((src, i) => {
+  //     const isActive = i < 3; // only Opt1–Opt3 active
+  //     return `
+  //     <div class="option-item ${isActive ? 'active' : 'non-active'}" data-idx="${i}">
+  //       <img src="${src}" alt="Option ${i + 1}">
+  //       ${!isActive
+  //         ? `<div class="overlay">Not available due to site constraints</div>`
+  //         : ''}
+  //     </div>
+  //   `;
+  //   })
+  //   .join('');
+
+  const itemsHtml = optionImages
+    .map((src, i) => {
+      const isActive = i < 3; // only Opt1–Opt3 active
+      const overlayText = isActive
+        ? optionDescriptions[i]
+        : "Not available due to site constraints";
+      return `
+      <div class="option-item ${isActive ? 'active' : 'non-active'}" data-idx="${i}">
         <img src="${src}" alt="Option ${i + 1}">
+        <div class="overlay">${overlayText}</div>
       </div>
-    `).join('');
+    `;
+    })
+    .join('');
 
   // inject scrollable grid + fixed buttons
   modal.innerHTML = `
@@ -220,28 +270,52 @@ function designOptions() {
       }
     });
 
-    // click to lock selection
-    item.addEventListener('click', () => {
-      // clear previous active + hide their rects
-      items.forEach(other => {
-        other.classList.remove('active');
-        const oidx = +other.dataset.idx;
-        const orect = document.getElementById(`option${oidx + 1}-rect`);
-        orect && (orect.style.display = 'none');
-      });
-
-      // mark this one active + keep its rect visible
-      item.classList.add('active');
-      rect && (rect.style.display = 'block');
-    });
   });
 
+  // 1. Prepare a layer‐group to hold just the “hover” marker
+  const hoverLayer = L.layerGroup().addTo(map);
+
+  // 2. Grab all your active preview images
+  const previewImgs = document.querySelectorAll('.option-item.active img');
+
+  const smallSize = [finalIconSizeX, finalIconSizeY];
+  const smallAnchor = [finalAnchorX, finalAnchorY];
+
+  // large pin (for opt 3)
+  const largeSize = [finalIconSizeXLarge, finalIconSizeYLarge];
+  const largeAnchor = [finalAnchorXLarge - 1, finalAnchorYLarge + 54];
+
+  previewImgs.forEach((img, idx) => {
+    img.addEventListener('mouseover', () => {
+      // clear any existing hover-pin
+      hoverLayer.clearLayers();
+
+      // choose size & anchor based on which option (idx 0,1 → small; idx 2 → large)
+      const isLarge = idx === 2;
+      const iconSize = isLarge ? largeSize : smallSize;
+      const iconAnchor = isLarge ? largeAnchor : smallAnchor;
+
+      // build the icon with the correct dimensions
+      const hoverIcon = L.icon({
+        iconUrl: `assets/zoning_mockup_opt${idx + 1}.svg`,
+        iconSize,
+        iconAnchor
+      });
+
+      // drop it at your fixed lat/lng
+      L.marker([47.64181476395757, -122.35323469486246], { icon: hoverIcon })
+        .addTo(hoverLayer);
+    });
+
+    img.addEventListener('mouseout', () => {
+      hoverLayer.clearLayers();
+    });
+  });
   // pan & fly the map
   map.flyTo([47.64183193210692, -122.352933616903], zoomLevelSecondary);
 
-  // move the site/offset rects over
-  document.getElementById('site-rect')?.classList.add('moved-rect');
-  document.getElementById('offset-rect')?.classList.add('moved-rect');
+
+
 }
 
 

@@ -272,30 +272,105 @@ h2 {
 }
 
 .options-grid {
-  height: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
-  /* margin: 15px; */
-  /* padding: 30px 0; */
+  height: 100%;
+}
+
+.option-item {
+  position: relative;
+  cursor: pointer;
 }
 
 .option-item img {
-  margin: 5px;
   display: block;
   width: 100%;
   height: auto;
   border-radius: 25px;
 }
 
-.option-item img:hover {
-  outline: 3px solid rgba(87, 87, 87, 0.2);
-  outline-offset: 0;
-}
-
-.option-item.active img {
+.option-item.active:hover {
+  border-radius: 15px;
   outline: 4px solid #575757;
   outline-offset: 2px;
+}
+
+.option-item.non-active img {
+  filter: grayscale(100%);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.option-item.non-active {
+  pointer-events: none;
+}
+
+.option-item.active .overlay {
+  display: none;
+}
+
+/* .option-item.active:hover .overlay {
+  size: 14px;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #333;
+  text-align: center;
+  pointer-events: none;
+} */
+
+.option-item.active:hover .overlay {
+  /* make the box a bit bigger */
+  min-width: 200px;
+  padding: 12px 16px;
+  border-radius: 6px;
+
+  /* bump up the base font-size */
+  font-size: 14px;
+  line-height: 1.4;
+
+  /* styling */
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  text-align: center;
+  pointer-events: none;
+}
+
+/* make just the first line (your title) stand out */
+.option-item.active:hover .overlay::first-line {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 6px; /* extra space under the title */
+  display: block; /* ensure it wraps to its own line */
+}
+
+.option-item.non-active .overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #333;
+  text-align: center;
+  pointer-events: none;
 }
 
 .bottom-divider {
