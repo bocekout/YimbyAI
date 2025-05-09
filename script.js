@@ -22,9 +22,12 @@ L.tileLayer(
   {
     attribution: 'Tiles © Esri',
     maxNativeZoom: 19,  // Esri goes very deep
-    maxZoom: 23
+    maxZoom: 23,
+    opacity: 0.5,    // <-- 50% opaque
   }
 ).addTo(map);
+
+const zoomLevelSecondary = 20.7;
 
 function resetModal() {
   const modal = document.getElementById('modal');
@@ -67,17 +70,46 @@ function closeModal() {
   </div>
 </div>
 `
+  const iconSizeX = 420;
+  const iconSizeY = 568;
+  const multiplier = 0.9;
+  const finalIconSizeX = iconSizeX * multiplier;
+  const finalIconSizeY = iconSizeY * multiplier;
+  const xMove = 90;
+  const yMove = -20;
+  const finalAnchorX = finalIconSizeX * 0.5 + xMove;
+  const finalAnchorY = finalIconSizeY * 0.5 + yMove;
 
   // Zoom and pan map
-  map.flyTo([47.64181464389503, -122.35323394443465], 20, { duration: 0.75 });
+  map.flyTo([47.641863557630266, -122.35323335375799], zoomLevelSecondary, { duration: 0.75 });
 
   // Delay showing rectangles by 1000ms
   const siteRect = document.getElementById('site-rect');
   const offsetRect = document.getElementById('offset-rect');
-
+  const customPin = L.icon({
+    iconUrl: 'assets/zoning_mockup.svg',   // path to your SVG
+    iconSize: [finalIconSizeX, finalIconSizeY],             // adjust to your SVG’s intrinsic size
+    iconAnchor: [finalAnchorX, finalAnchorY],             // [half-width, full-height] → bottom-center
+  });
   setTimeout(() => {
-    if (siteRect) siteRect.style.display = 'block';
-    if (offsetRect) offsetRect.style.display = 'block';
+    // if (siteRect) siteRect.style.display = 'block';
+    // if (offsetRect) offsetRect.style.display = 'block';
+
+
+    // 2. Add it at your chosen lat/lng
+    const marker = L.marker([47.64181476395757, -122.35323469486246], { icon: customPin })
+      .addTo(map)
+      .bindPopup("Buildable zones appear in green.");  // optional popup
+
+    // 2. Open the popup on hover…
+    marker.on('mouseover', function () {
+      this.openPopup();
+    });
+
+    // 3. …and close it when the mouse leaves
+    marker.on('mouseout', function () {
+      this.closePopup();
+    });
   }, 1000);
 }
 
@@ -205,7 +237,7 @@ function designOptions() {
   });
 
   // pan & fly the map
-  map.flyTo([47.64183328748627, -122.35271065830551], 20);
+  map.flyTo([47.64183193210692, -122.352933616903], zoomLevelSecondary);
 
   // move the site/offset rects over
   document.getElementById('site-rect')?.classList.add('moved-rect');
@@ -223,9 +255,9 @@ function compareOptions() {
 
   // Build the comparison view
   modal.innerHTML = `
-      <div class="modal-content">
+      <div class="modal-content compare-options-modal ">
         <div class="option-container">
-        <button class="back-btn" onclick="designOptions()">← Back</button>
+        <h3>Option 1</h3>
           <img src="assets/Compare_Option_1.png" alt="Compare Option 1">
           <div>
             <p>Data point A</p>
@@ -252,46 +284,46 @@ function compareOptions() {
     `;
 }
 
-
 function financialReport() {
   const modal = resetModal();
-  // switch sizing classes
-  modal.classList.remove('wide');
   modal.classList.add('full-wide');
 
   modal.innerHTML = `
-      <div class="modal-content dashboard">
-      <h3>Option 2</h3>
-        <div class="dashboard-header">
-          <!-- reuse the first compare option image -->
-          <img src="assets/Compare_Option_1.png" alt="ADU Option" style="width:500px; border-radius:8px;">
-          <div class="finance-box">
-            <h3>Finances</h3>
-            <img src="assets/stonks_line.png" alt="Financial Chart">
-          </div>
-        </div>
-  
-        <div class="data-boxes">
-          <div class="data-box">
-            <p>Total Cost</p>
-            <p>$150,000</p>
-          </div>
-          <div class="data-box">
-            <p>Annual ROI</p>
-            <p>5%</p>
-          </div>
-          <div class="data-box">
-            <p>Monthly Payment</p>
-            <p>$800</p>
-          </div>
-          <div class="data-box">
-            <p>Build Time</p>
-            <p>6 months</p>
-          </div>
-        </div>
-  
-<button class="back-btn" onclick="designOptions()">← Back</button>
-      </div>
-    `;
-}
+    <div class="modal-content dashboard">
+      <!-- 1. Title as a direct child -->
+      <h3 class="dashboard-title">AADU Project at 2508 Lorentz Pl N</h3>
 
+      <!-- 2. Top row: image + finance -->
+      <div class="dashboard-row header-row">
+        <img src="assets/Compare_Option_1.png" alt="ADU Option">
+        <div class="finance-box">
+          <h4>Project Timeline</h4>
+          <img src="assets/stonks_line.png" alt="Financial Chart">
+        </div>
+      </div>
+
+      <!-- 3. Second row: data boxes -->
+      <div class="dashboard-row data-row">
+        <div class="data-box">
+          <p>Total Cost</p>
+          <p>$150,000</p>
+        </div>
+        <div class="data-box">
+          <p>Annual ROI</p>
+          <p>5%</p>
+        </div>
+        <div class="data-box">
+          <p>Monthly Payment</p>
+          <p>$800</p>
+        </div>
+        <div class="data-box">
+          <p>Build Time</p>
+          <p>6 months</p>
+        </div>
+      </div>
+
+      <!-- 4. Back button -->
+      <button class="back-btn" onclick="designOptions()">← Back</button>
+    </div>
+  `;
+}
